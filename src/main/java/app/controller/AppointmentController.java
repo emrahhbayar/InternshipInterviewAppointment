@@ -6,6 +6,7 @@ import app.service.AppointmentService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,16 @@ public class AppointmentController
     {
         appointmentService.save(appointment);
         return appointment;
+    }
+    @GetMapping("/day/{date}")
+    public List<Appointment> findByDay(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date date)
+    {
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY,23);
+        calendar.add(Calendar.MINUTE,59);
+        Date end=calendar.getTime();
+        return appointmentService.findByDateBetween(date,end);
     }
     @PutMapping
     public void update(@RequestBody Appointment appointment)
@@ -72,6 +83,16 @@ public class AppointmentController
                 appointmentService.save(appointment);
             }
         }
+    }
+    @GetMapping("/teacher/{teacherId}")
+    public List<Appointment> findByTeacherIdAndTakenOrderByDate(@PathVariable int teacherId)
+    {
+        return appointmentService.findByTeacherIdAndTakenOrderByDate(teacherId);
+    }
+    @GetMapping("/student/{id}")
+    public List<Appointment> findByStudentId(@PathVariable int id)
+    {
+        return appointmentService.findByStudentId(id);
     }
     @Getter
     @Setter

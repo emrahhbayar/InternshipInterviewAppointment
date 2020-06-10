@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/userDetails").authenticated()
                 .antMatchers(HttpMethod.GET,"/internshipSubject/**","/appointment/**","/announcement/**","/internship/**").authenticated()
                 .antMatchers(HttpMethod.PUT,"/appointment/**").authenticated()
+                .antMatchers(HttpMethod.POST,"/internship").authenticated()
                 .antMatchers("/teacher/**","/student/**","/appointment/**","/internship/**","/internshipSubject/**","/announcement/**").hasRole("Teacher")
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
